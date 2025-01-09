@@ -1,19 +1,19 @@
 package com.sirac.model;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User extends BaseEntity{
 
     @Column(name = "username")
     private String username;
@@ -23,4 +23,10 @@ public class User extends BaseEntity {
 
     @Column(name = "nickname")
     private String nickname;
+
+    @Column(name = "followers_count")
+    private long followersCount;
+
+    @Column(name = "following_count")
+    private long followingCount;
 }
