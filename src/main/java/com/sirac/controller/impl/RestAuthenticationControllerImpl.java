@@ -4,6 +4,7 @@ import com.sirac.controller.IRestAuthenticationController;
 import com.sirac.controller.RestBaseController;
 import com.sirac.controller.RootEntity;
 import com.sirac.dto.AuthRequest;
+import com.sirac.dto.AuthResponse;
 import com.sirac.dto.DtoLoginUser;
 import com.sirac.service.IAuthenticationService;
 import jakarta.validation.Valid;
@@ -22,5 +23,11 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
     @Override
     public RootEntity<DtoLoginUser> register(@Valid @RequestBody AuthRequest input) {
         return ok(authenticationService.register(input));
+    }
+
+    @PostMapping("/authenticate")
+    @Override
+    public RootEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest input) {
+        return ok(authenticationService.authenticate(input));
     }
 }
