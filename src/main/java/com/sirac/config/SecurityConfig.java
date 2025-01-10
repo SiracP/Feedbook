@@ -1,5 +1,6 @@
 package com.sirac.config;
 
+import com.sirac.handler.AuthEntryPoint;
 import com.sirac.jwt.JWTAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     @Autowired
     private JWTAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private AuthEntryPoint authEntryPoint;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -36,6 +40,9 @@ public class SecurityConfig {
             request.requestMatchers(REGISTER,AUTHENTICATE,REFRESH_TOKEN).permitAll();
             request.anyRequest().authenticated();
         });
+
+        http.exceptionHandling(exception ->
+                exception.authenticationEntryPoint(authEntryPoint));
 
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
