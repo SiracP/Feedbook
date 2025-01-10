@@ -18,7 +18,7 @@ public class SecurityConfig {
 
     public static final String REGISTER = "/register";
     public static final String AUTHENTICATE = "/authenticate";
-    public static final String REFESH_TOKEN = "/refreshToken";
+    public static final String REFRESH_TOKEN = "/refreshToken";
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
@@ -30,12 +30,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(REGISTER,AUTHENTICATE,REFESH_TOKEN)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .sessionManagement(session -> session.
-                        sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .requestMatchers(REGISTER,AUTHENTICATE,REFRESH_TOKEN).permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -1,6 +1,5 @@
 package com.sirac.jwt;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
@@ -11,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

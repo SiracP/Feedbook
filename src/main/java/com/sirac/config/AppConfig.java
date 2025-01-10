@@ -3,8 +3,8 @@ package com.sirac.config;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
-import com.sirac.model.User;
-import com.sirac.repository.UserRepository;
+import com.sirac.model.LoginUser;
+import com.sirac.repository.LoginUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,14 +22,14 @@ import java.util.Optional;
 public class AppConfig {
 
     @Autowired
-    private UserRepository userRepository;
+    private LoginUserRepository loginUserRepository;
 
     @Bean
     public UserDetailsService userDetailsService(){
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                Optional<User> optional = userRepository.findByUsername(username);
+                Optional<LoginUser> optional = loginUserRepository.findByUsername(username);
                 if(optional.isEmpty()){
                     throw new BaseException(new ErrorMessage(MessageType.USERNAME_NOT_FOUND,username));
                 }
