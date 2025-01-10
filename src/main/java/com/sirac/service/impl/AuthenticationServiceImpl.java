@@ -3,6 +3,7 @@ package com.sirac.service.impl;
 import com.sirac.dto.AuthRequest;
 import com.sirac.dto.AuthResponse;
 import com.sirac.dto.DtoLoginUser;
+import com.sirac.dto.RefreshTokenRequest;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
@@ -89,5 +90,27 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         }catch (Exception ex) {
             throw new BaseException(new ErrorMessage(MessageType.USERNAME_OR_PASSWORD_INVALID,ex.getMessage()));
         }
+    }
+    public boolean isRefreshTokenExpired(Date expireDate){
+        return new Date().after(expireDate);
+    }
+
+    @Override
+    public AuthResponse refreshToken(RefreshTokenRequest input) {
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByRefreshToken(input.getRefreshToken());
+
+        if(optionalRefreshToken.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_NOT_FOUND,input.getRefreshToken()));
+        }
+
+        if(isRefreshTokenExpired(optionalRefreshToken.get().getExpireDate())){
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_IS_EXPIRED,input.getRefreshToken()));
+        }
+
+        LoginUser loginUser = optionalRefreshToken.get().getLoginUser();
+        String accessToken = jwtService.generateToken(loginUser);
+        RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(loginUser));
+
+        return new AuthResponse(accessToken,savedRefreshToken.getRefreshToken());
     }
 }
