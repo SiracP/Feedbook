@@ -30,30 +30,33 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-        if(header == null){
-            filterChain.doFilter(request,response);
-            String token,username;
 
-            token = header.substring(7);
-            try {
-                username = jwtService.getUsernameByToken(token);
-                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                    if(userDetails != null && jwtService.isTokenValid(token)){
-                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,userDetails.getAuthorities());
+        if(header == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                        authenticationToken.setDetails(userDetails);
+        String token,username;
 
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
+        token = header.substring(7);
+        try {
+            username = jwtService.getUsernameByToken(token);
+            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if(userDetails != null && jwtService.isTokenValid(token)){
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,userDetails.getAuthorities());
+
+                    authenticationToken.setDetails(userDetails);
+
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-            }catch (ExpiredJwtException ex){
-                throw new BaseException(new ErrorMessage(MessageType.TOKEN_IS_EXPIRED, ex.getMessage()));
+            }
+        }catch (ExpiredJwtException ex){
+            throw new BaseException(new ErrorMessage(MessageType.TOKEN_IS_EXPIRED, ex.getMessage()));
 
-            }
-            catch (Exception ex){
-                throw new BaseException(new ErrorMessage(MessageType.GENERAL_EXCEPTION,ex.getMessage()));
-            }
+        }
+        catch (Exception ex){
+            throw new BaseException(new ErrorMessage(MessageType.GENERAL_EXCEPTION,ex.getMessage()));
         }
     }
 }

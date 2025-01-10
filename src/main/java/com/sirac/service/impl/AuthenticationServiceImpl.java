@@ -23,6 +23,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     private LoginUser createLoginUser(AuthRequest input){
         LoginUser loginUser = new LoginUser();
+        loginUser.setUsername(input.getUsername());
         loginUser.setCreateTime(new Date());
         loginUser.setUpdateTime(new Date());
         loginUser.setPassword(passwordEncoder.encode(input.getPassword()));
