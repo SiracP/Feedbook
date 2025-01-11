@@ -21,5 +21,5 @@ public class Topic extends BaseEntity{
     private String title;
 
     @Column(name = "entry_count")
-    private long entryCount;
+    private Long entryCount;
 }

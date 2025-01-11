@@ -58,5 +58,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         catch (Exception ex){
             throw new BaseException(new ErrorMessage(MessageType.GENERAL_EXCEPTION,ex.getMessage()));
         }
+        filterChain.doFilter(request,response);
     }
 }

@@ -24,5 +24,5 @@ public class Entry extends BaseEntity {
     private String content;
 
     @Column(name = "like_count")
-    private long likeCount;
+    private Long likeCount;
 }

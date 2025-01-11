@@ -24,8 +24,8 @@ public class User extends BaseEntity{
     private String nickname;
 
     @Column(name = "followers_count")
-    private long followersCount;
+    private Long followersCount;
 
     @Column(name = "following_count")
-    private long followingCount;
+    private Long followingCount;
 }
