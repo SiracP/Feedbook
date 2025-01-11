@@ -2,22 +2,22 @@ package com.sirac.service.impl;
 
 import com.sirac.dto.AuthRequest;
 import com.sirac.dto.AuthResponse;
-import com.sirac.dto.DtoLoginUser;
+import com.sirac.dto.DtoUser;
 import com.sirac.dto.RefreshTokenRequest;
+import com.sirac.dto.dto_insert_update.DtoUserIU;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
 import com.sirac.jwt.JWTService;
-import com.sirac.model.LoginUser;
 import com.sirac.model.RefreshToken;
-import com.sirac.repository.LoginUserRepository;
+import com.sirac.model.User;
 import com.sirac.repository.RefreshTokenRepository;
+import com.sirac.repository.UserRepository;
 import com.sirac.service.IAuthenticationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
-    private LoginUserRepository loginUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -43,49 +43,52 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    private LoginUser createLoginUser(AuthRequest input){
-        LoginUser loginUser = new LoginUser();
-        loginUser.setUsername(input.getUsername());
-        loginUser.setCreateTime(new Date());
-        loginUser.setUpdateTime(new Date());
-        loginUser.setPassword(passwordEncoder.encode(input.getPassword()));
+    private User createUser(DtoUserIU input){
+        User user = new User();
+        user.setUsername(input.getUsername());
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setNickname(input.getNickname());
+        user.setFollowersCount(0L);
+        user.setFollowingCount(0L);
 
-        return loginUser;
+        return user;
     }
 
-    private RefreshToken createRefreshToken(LoginUser loginUser){
+    private RefreshToken createRefreshToken(User user){
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setCreateTime(new Date());
         refreshToken.setUpdateTime(new Date());
         refreshToken.setExpireDate(new Date(System.currentTimeMillis() + 1000*60*60*4));
         refreshToken.setRefreshToken(UUID.randomUUID().toString());
-        refreshToken.setLoginUser(loginUser);
+        refreshToken.setUser(user);
         return refreshToken;
     }
 
     @Override
-    public DtoLoginUser register(AuthRequest input) {
-        DtoLoginUser dtoLoginUser = new DtoLoginUser();
-        LoginUser savedLoginUser = loginUserRepository.save(createLoginUser(input));
+    public DtoUser register(DtoUserIU input) {
+        DtoUser dtoUser = new DtoUser();
+        User savedUser = userRepository.save(createUser(input));
 
-        BeanUtils.copyProperties(savedLoginUser,dtoLoginUser);
-        return dtoLoginUser;
+        BeanUtils.copyProperties(savedUser,dtoUser);
+        return dtoUser;
     }
 
     @Override
-    public AuthResponse authenticate(AuthRequest input) {
+    public AuthResponse login(AuthRequest input) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(input.getUsername(),input.getPassword());
             authenticationProvider.authenticate(authenticationToken);
 
-            Optional<LoginUser> optionalLoginUser = loginUserRepository.findByUsername(input.getUsername());
+            Optional<User> optionalUser = userRepository.findByUsername(input.getUsername());
 
-            String accessToken = jwtService.generateToken(optionalLoginUser.get());
+            String accessToken = jwtService.generateToken(optionalUser.get());
 
-            RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(optionalLoginUser.get()));
+            RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(optionalUser.get()));
 
-            return new AuthResponse(accessToken,savedRefreshToken.getRefreshToken());
+            return new AuthResponse(accessToken,savedRefreshToken.getRefreshToken(),optionalUser.get());
 
         }catch (Exception ex) {
             throw new BaseException(new ErrorMessage(MessageType.USERNAME_OR_PASSWORD_INVALID,ex.getMessage()));
@@ -107,10 +110,10 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_IS_EXPIRED,input.getRefreshToken()));
         }
 
-        LoginUser loginUser = optionalRefreshToken.get().getLoginUser();
-        String accessToken = jwtService.generateToken(loginUser);
-        RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(loginUser));
+        User user = optionalRefreshToken.get().getUser();
+        String accessToken = jwtService.generateToken(user);
+        RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(user));
 
-        return new AuthResponse(accessToken,savedRefreshToken.getRefreshToken());
+        return new AuthResponse(accessToken,savedRefreshToken.getRefreshToken(),user);
     }
 }

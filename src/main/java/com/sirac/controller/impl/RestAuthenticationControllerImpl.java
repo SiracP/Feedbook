@@ -5,8 +5,9 @@ import com.sirac.controller.RestBaseController;
 import com.sirac.controller.RootEntity;
 import com.sirac.dto.AuthRequest;
 import com.sirac.dto.AuthResponse;
-import com.sirac.dto.DtoLoginUser;
+import com.sirac.dto.DtoUser;
 import com.sirac.dto.RefreshTokenRequest;
+import com.sirac.dto.dto_insert_update.DtoUserIU;
 import com.sirac.service.IAuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
 
     @PostMapping("/register")
     @Override
-    public RootEntity<DtoLoginUser> register(@Valid @RequestBody AuthRequest input) {
+    public RootEntity<DtoUser> register(@Valid @RequestBody DtoUserIU input) {
         return ok(authenticationService.register(input));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     @Override
-    public RootEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest input) {
-        return ok(authenticationService.authenticate(input));
+    public RootEntity<AuthResponse> login(@Valid @RequestBody AuthRequest input) {
+        return ok(authenticationService.login(input));
     }
 
     @PostMapping("/refreshToken")

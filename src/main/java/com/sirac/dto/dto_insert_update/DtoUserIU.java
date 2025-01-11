@@ -7,6 +7,12 @@ import lombok.Data;
 public class DtoUserIU {
 
     @NotNull
+    private String username;
+
+    @NotNull
+    private String password;
+
+    @NotNull
     private String nickname;
 
     private Long followersCount;
