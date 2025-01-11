@@ -18,7 +18,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity implements UserDetails{
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "nickname")
     private String nickname;
@@ -28,4 +34,9 @@ public class User extends BaseEntity{
 
     @Column(name = "following_count")
     private Long followingCount;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }

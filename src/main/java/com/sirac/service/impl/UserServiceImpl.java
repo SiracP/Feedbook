@@ -14,24 +14,4 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private User createUser(DtoUserIU dtoUserIU){
-        User user = new User();
-        user.setCreateTime(new Date());
-        user.setUpdateTime(new Date());
-        user.setNickname(dtoUserIU.getNickname());
-        user.setFollowersCount(0L);
-        user.setFollowingCount(0L);
-        return user;
-    }
-
-    @Override
-    public DtoUser saveUser(DtoUserIU dtoUserIU) {
-        User savedUser = userRepository.save(createUser(dtoUserIU));
-        DtoUser dtoUser = new DtoUser();
-        BeanUtils.copyProperties(savedUser,dtoUser);
-        return dtoUser;
-    }
 }

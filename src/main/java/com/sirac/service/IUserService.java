@@ -5,5 +5,4 @@ import com.sirac.dto.dto_insert_update.DtoUserIU;
 
 public interface IUserService {
 
-    public DtoUser saveUser(DtoUserIU dtoUserIU);
 }

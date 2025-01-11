@@ -17,12 +17,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest/api/user")
 public class RestUserControllerImpl extends RestBaseController implements IRestUserController {
 
-    @Autowired
-    private IUserService userService;
-
-    @PostMapping("/save")
-    @Override
-    public RootEntity<DtoUser> saveUser(@Valid @RequestBody DtoUserIU dtoUserIU) {
-        return ok(userService.saveUser(dtoUserIU));
-    }
 }
