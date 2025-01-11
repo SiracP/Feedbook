@@ -20,6 +20,9 @@ public class Entry extends BaseEntity {
     @ManyToOne
     private Topic topic;
 
+    @ManyToOne
+    private User user;
+
     @Column(name = "content")
     private String content;
 

@@ -1,5 +1,6 @@
 package com.sirac.dto.dto_insert_update;
 
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,18 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoUserIU {
+public class DtoEntryIU {
 
     @NotNull
-    private String username;
+    private Long topicId;
 
     @NotNull
-    private String password;
+    private Long userId;
 
     @NotNull
-    private String nickname;
+    private String content;
 
-    private Long followersCount;
-
-    private Long followingCount;
+    private Long likeCount;
 }

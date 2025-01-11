@@ -1,6 +1,7 @@
 package com.sirac.controller.impl;
 
 import com.sirac.controller.IRestTopicController;
+import com.sirac.controller.RestBaseController;
 import com.sirac.controller.RootEntity;
 import com.sirac.dto.DtoTopic;
 import com.sirac.dto.dto_insert_update.DtoTopicIU;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.sirac.controller.RootEntity.ok;
-
 @RestController
 @RequestMapping("/rest/api/topic")
-public class RestTopicControllerImpl implements IRestTopicController {
+public class RestTopicControllerImpl extends RestBaseController implements IRestTopicController {
 
     @Autowired
     private ITopicService topicService;

@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class DtoTopic extends DtoBase {
+@NoArgsConstructor
+public class DtoEntry extends DtoBase {
+
+    private DtoTopic topic;
 
     private DtoUser user;
 
-    private String title;
+    private String content;
 
-    private Long entryCount;
+    private Long likeCount;
 }
