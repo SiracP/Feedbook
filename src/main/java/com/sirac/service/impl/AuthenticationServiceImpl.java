@@ -14,6 +14,7 @@ import com.sirac.model.User;
 import com.sirac.repository.RefreshTokenRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.IAuthenticationService;
+import com.sirac.service.SavedToDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -26,7 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthenticationServiceImpl implements IAuthenticationService {
+public class AuthenticationServiceImpl implements IAuthenticationService, SavedToDto {
 
     @Autowired
     private UserRepository userRepository;
@@ -68,11 +69,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public DtoUser register(DtoUserIU input) {
-        DtoUser dtoUser = new DtoUser();
         User savedUser = userRepository.save(createUser(input));
 
-        BeanUtils.copyProperties(savedUser,dtoUser);
-        return dtoUser;
+        return savedToDtoUser(savedUser);
     }
 
     @Override

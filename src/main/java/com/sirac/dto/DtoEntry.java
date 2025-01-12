@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DtoEntry extends DtoBase {
 
-    private DtoTopic topic;
-
-    private DtoUser user;
-
     private String content;
 
     private Long likeCount;
+
+    private DtoUser user;
+
+    private DtoTopic topic;
 }

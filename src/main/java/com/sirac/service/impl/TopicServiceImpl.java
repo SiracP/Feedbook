@@ -11,17 +11,16 @@ import com.sirac.model.User;
 import com.sirac.repository.TopicRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.ITopicService;
-import jakarta.validation.Valid;
+import com.sirac.service.SavedToDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class TopicServiceImpl implements ITopicService {
+public class TopicServiceImpl implements ITopicService, SavedToDto {
 
     @Autowired
     private UserRepository userRepository;
@@ -47,11 +46,6 @@ public class TopicServiceImpl implements ITopicService {
     @Override
     public DtoTopic saveTopic(DtoTopicIU dtoTopicIU) {
         Topic savedTopic = topicRepository.save(createTopic(dtoTopicIU));
-        DtoTopic dtoTopic = new DtoTopic();
-        DtoUser dtoUser = new DtoUser();
-        BeanUtils.copyProperties(savedTopic,dtoTopic);
-        BeanUtils.copyProperties(savedTopic.getUser(),dtoUser);
-        dtoTopic.setUser(dtoUser);
-        return dtoTopic;
+        return savedToDtoTopic(savedTopic);
     }
 }

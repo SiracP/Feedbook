@@ -14,6 +14,7 @@ import com.sirac.repository.EntryRepository;
 import com.sirac.repository.TopicRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.IEntryService;
+import com.sirac.service.SavedToDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class EntryServiceImpl implements IEntryService {
+public class EntryServiceImpl implements IEntryService, SavedToDto {
 
     @Autowired
     private EntryRepository entryRepository;
@@ -55,20 +56,7 @@ public class EntryServiceImpl implements IEntryService {
     @Override
     public DtoEntry saveEntry(DtoEntryIU dtoEntryIU) {
         Entry savedEntry = entryRepository.save(createEntry(dtoEntryIU));
-        DtoTopic dtoTopic = new DtoTopic();
-        DtoUser dtoUser = new DtoUser();
-        DtoEntry dtoEntry = new DtoEntry();
-        DtoUser dtoTopicUser = new DtoUser();
 
-        BeanUtils.copyProperties(savedEntry,dtoEntry);
-        BeanUtils.copyProperties(savedEntry.getUser(),dtoUser);
-        BeanUtils.copyProperties(savedEntry.getTopic(),dtoTopic);
-        BeanUtils.copyProperties(savedEntry.getTopic().getUser(),dtoTopicUser);
-
-        dtoEntry.setUser(dtoUser);
-        dtoEntry.setTopic(dtoTopic);
-        dtoEntry.getTopic().setUser(dtoTopicUser);
-
-        return dtoEntry;
+        return savedtoDtoEntry(savedEntry);
     }
 }
