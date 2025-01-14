@@ -1,8 +1,6 @@
 package com.sirac.service.impl;
 
-import com.sirac.dto.DtoEntry;
 import com.sirac.dto.DtoLike;
-import com.sirac.dto.DtoUser;
 import com.sirac.dto.dto_insert_update.DtoLikeIU;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;

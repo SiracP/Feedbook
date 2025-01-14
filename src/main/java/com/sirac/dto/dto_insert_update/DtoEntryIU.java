@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 public class DtoEntryIU {
 
     @NotNull
-    private Long topicId;
+    private String content;
+
+    private Long likeCount;
 
     @NotNull
     private Long userId;
 
     @NotNull
-    private String content;
-
-    private Long likeCount;
+    private Long topicId;
 }

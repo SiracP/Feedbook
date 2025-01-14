@@ -1,13 +1,7 @@
 package com.sirac.service;
 
-import com.sirac.dto.DtoEntry;
-import com.sirac.dto.DtoLike;
-import com.sirac.dto.DtoTopic;
-import com.sirac.dto.DtoUser;
-import com.sirac.model.Entry;
-import com.sirac.model.Likes;
-import com.sirac.model.Topic;
-import com.sirac.model.User;
+import com.sirac.dto.*;
+import com.sirac.model.*;
 import org.springframework.beans.BeanUtils;
 
 public interface SavedToDto {
@@ -45,5 +39,25 @@ public interface SavedToDto {
         dtoLike.setEntry(savedtoDtoEntry(savedLike.getEntry()));
 
         return dtoLike;
+    }
+
+    default DtoSavedEntries savedtoDtoSavedEntry(SavedEntries savedEntries){
+        DtoSavedEntries dtoSavedEntries = new DtoSavedEntries();
+        BeanUtils.copyProperties(savedEntries,dtoSavedEntries);
+
+        dtoSavedEntries.setUser(savedToDtoUser(savedEntries.getUser()));
+        dtoSavedEntries.setEntry((savedtoDtoEntry(savedEntries.getEntry())));
+
+        return  dtoSavedEntries;
+    }
+
+    default DtoFollowingUsers savedtoDtoSavedEntry(FollowingUsers followingUsers){
+        DtoFollowingUsers dtoFollowingUsers = new DtoFollowingUsers();
+        BeanUtils.copyProperties(followingUsers,dtoFollowingUsers);
+
+        dtoFollowingUsers.setFollower(savedToDtoUser(followingUsers.getFollower()));
+        dtoFollowingUsers.setFollowering((savedToDtoUser(followingUsers.getFollowing())));
+
+        return  dtoFollowingUsers;
     }
 }

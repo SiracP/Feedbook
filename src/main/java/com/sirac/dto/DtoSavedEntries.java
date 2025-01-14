@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoLike extends DtoBase {
+public class DtoSavedEntries extends DtoBase{
 
     private DtoUser user;
 

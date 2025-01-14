@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DtoLikeIU {
+public class DtoFollowingUsersIU {
 
     @NotNull
-    private Long userId;
+    private Long followerId;
 
     @NotNull
-    private Long entryId;
+    private Long followingId;
 }

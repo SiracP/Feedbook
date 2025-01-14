@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoLike extends DtoBase {
+public class DtoFollowingUsers {
 
-    private DtoUser user;
+    private DtoUser follower;
 
-    private DtoEntry entry;
+    private DtoUser followering;
 }

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class DtoTopicIU {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private String title;
 
     private Long entryCount;
+
+    @NotNull
+    private Long userId;
 }
