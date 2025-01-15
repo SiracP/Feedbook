@@ -8,10 +8,7 @@ import com.sirac.dto.dto_insert_update.DtoTopicIU;
 import com.sirac.service.ITopicService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/api/topic")
@@ -24,5 +21,11 @@ public class RestTopicControllerImpl extends RestBaseController implements IRest
     @Override
     public RootEntity<DtoTopic> saveTopic(@Valid @RequestBody DtoTopicIU dtoTopicIU) {
         return ok(topicService.saveTopic(dtoTopicIU));
+    }
+
+    @DeleteMapping("/delete/{topicId}")
+    @Override
+    public RootEntity<DtoTopic> deleteTopic(@RequestParam(name = "topicId") Long topicId) {
+        return ok(topicService.deleteTopic(topicId));
     }
 }

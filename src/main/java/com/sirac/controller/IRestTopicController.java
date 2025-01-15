@@ -6,4 +6,6 @@ import com.sirac.dto.dto_insert_update.DtoTopicIU;
 public interface IRestTopicController {
 
     public RootEntity<DtoTopic> saveTopic(DtoTopicIU dtoTopicIU);
+
+    public RootEntity<DtoTopic> deleteTopic(Long topicId);
 }

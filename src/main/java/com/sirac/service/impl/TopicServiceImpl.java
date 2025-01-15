@@ -31,7 +31,7 @@ public class TopicServiceImpl implements ITopicService, SavedToDto {
     private Topic createTopic(DtoTopicIU dtoTopicIU){
         Optional<User> optionalUser = userRepository.findById(dtoTopicIU.getUserId());
         if(optionalUser.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoTopicIU.getUserId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"userId: " + dtoTopicIU.getUserId().toString()));
         }
         Topic topic = new Topic();
         topic.setCreateTime(new Date());
@@ -42,9 +42,24 @@ public class TopicServiceImpl implements ITopicService, SavedToDto {
         return topic;
     }
 
+    private Topic findTopic(Long topicId){
+        Optional<Topic> optionalTopic = topicRepository.findById(topicId);
+        if(optionalTopic.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"topicId: " + topicId.toString()));
+        }
+        return optionalTopic.get();
+    }
+
     @Override
     public DtoTopic saveTopic(DtoTopicIU dtoTopicIU) {
         Topic savedTopic = topicRepository.save(createTopic(dtoTopicIU));
         return savedToDtoTopic(savedTopic);
+    }
+
+    @Override
+    public DtoTopic deleteTopic(Long topicId) {
+        Topic topic = findTopic(topicId);
+        topicRepository.delete(topic);
+        return savedToDtoTopic(topic);
     }
 }
