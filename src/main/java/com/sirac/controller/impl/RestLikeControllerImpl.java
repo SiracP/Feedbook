@@ -8,10 +8,7 @@ import com.sirac.dto.dto_insert_update.DtoLikeIU;
 import com.sirac.service.ILikesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/api/like")
@@ -26,7 +23,7 @@ public class RestLikeControllerImpl extends RestBaseController implements IRestL
         return ok(likesService.likeAEntry(dtoLikeIU));
     }
 
-    @PostMapping("/dislike-entry")
+    @DeleteMapping("/dislike-entry")
     @Override
     public RootEntity<DtoLike> dislikeEntry(@Valid @RequestBody DtoLikeIU dtoLikeIU) {
         return ok(likesService.dislikeEntry(dtoLikeIU));

@@ -8,10 +8,7 @@ import com.sirac.dto.dto_insert_update.DtoFollowingUsersIU;
 import com.sirac.service.IFollowingUsersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/api/following-user")
@@ -26,7 +23,7 @@ public class RestFollowingUsersControllerImpl extends RestBaseController impleme
         return ok(followingUsersService.followUser(dtoFollowingUsersIU));
     }
 
-    @PostMapping("/unfollow-user")
+    @DeleteMapping("/unfollow-user")
     @Override
     public RootEntity<DtoFollowingUsers> unfollowUser(@Valid @RequestBody DtoFollowingUsersIU dtoFollowingUsersIU) {
         return ok(followingUsersService.unfollowUser(dtoFollowingUsersIU));

@@ -8,10 +8,7 @@ import com.sirac.dto.dto_insert_update.DtoSavedEntriesIU;
 import com.sirac.service.ISavedEntriesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/api/saved-entries")
@@ -26,7 +23,7 @@ public class RestSavedEntriesControllerImpl extends RestBaseController implement
         return ok(savedEntriesService.saveEntry(dtoSavedEntriesIU));
     }
 
-    @PostMapping("/delete-saved-entry")
+    @DeleteMapping("/delete-saved-entry")
     @Override
     public RootEntity<DtoSavedEntries> deleteSavedEntry(@Valid @RequestBody DtoSavedEntriesIU dtoSavedEntriesIU) {
         return ok(savedEntriesService.deleteSavedEntry(dtoSavedEntriesIU));
