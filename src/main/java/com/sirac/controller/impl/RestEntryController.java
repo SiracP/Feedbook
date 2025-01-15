@@ -25,7 +25,7 @@ public class RestEntryController extends RestBaseController implements IRestEntr
 
     @DeleteMapping("/delete/{entryId}")
     @Override
-    public RootEntity<DtoEntry> deleteEntry(@RequestParam(name = "entryId") Long entryId) {
+    public RootEntity<DtoEntry> deleteEntry(@PathVariable(name = "entryId") Long entryId) {
         return ok(entryService.deleteEntry(entryId));
     }
 }

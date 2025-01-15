@@ -25,7 +25,7 @@ public class RestTopicControllerImpl extends RestBaseController implements IRest
 
     @DeleteMapping("/delete/{topicId}")
     @Override
-    public RootEntity<DtoTopic> deleteTopic(@RequestParam(name = "topicId") Long topicId) {
+    public RootEntity<DtoTopic> deleteTopic(@PathVariable(name = "topicId")  Long topicId) {
         return ok(topicService.deleteTopic(topicId));
     }
 }
