@@ -38,6 +38,10 @@ public class EntryServiceImpl implements IEntryService, SavedToDto {
         entryTopic.setEntryCount(entryTopic.getEntryCount() + 1);
         return topicRepository.save(entryTopic);
     }
+    private void decreaseEntryCount(Topic entryTopic){
+        entryTopic.setEntryCount(entryTopic.getEntryCount() - 1);
+        topicRepository.save(entryTopic);
+    }
 
     private Entry createEntry(DtoEntryIU dtoEntryIU){
         Optional<Topic> optionalTopic = topicRepository.findById(dtoEntryIU.getTopicId());

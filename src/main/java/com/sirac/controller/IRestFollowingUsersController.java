@@ -5,4 +5,6 @@ import com.sirac.dto.dto_insert_update.DtoFollowingUsersIU;
 
 public interface IRestFollowingUsersController {
     RootEntity<DtoFollowingUsers> followUser(DtoFollowingUsersIU dtoFollowingUsersIU);
+
+    RootEntity<DtoFollowingUsers> unfollowUser(DtoFollowingUsersIU dtoFollowingUsersIU);
 }

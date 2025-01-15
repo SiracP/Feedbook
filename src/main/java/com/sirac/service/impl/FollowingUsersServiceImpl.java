@@ -35,15 +35,30 @@ public class FollowingUsersServiceImpl implements IFollowingUsersService, SavedT
         following.setFollowersCount(following.getFollowersCount()+1);
         return userRepository.save(following);
     }
+    private void decreaseFollowingCount(User follower){
+        follower.setFollowingCount(follower.getFollowingCount()-1);
+        userRepository.save(follower);
+    }
+    private void decreaseFollowerCount(User following){
+        following.setFollowersCount(following.getFollowersCount()-1);
+        userRepository.save(following);
+    }
 
     private FollowingUsers createFollowingUsers(DtoFollowingUsersIU dtoFollowingUsersIU){
+        Optional<FollowingUsers> optionalFollowingUsers = followingUsersRepository
+                .findDistinctByFollowerIdAndFollowingId(dtoFollowingUsersIU.getFollowerId(),dtoFollowingUsersIU.getFollowingId());
+        if(optionalFollowingUsers.isPresent()){
+            throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST,
+                    "followerId: " +dtoFollowingUsersIU.getFollowerId().toString()+
+                            " & followingId: " + dtoFollowingUsersIU.getFollowingId().toString()));
+        }
         Optional<User> optionalFollowerId = userRepository.findById(dtoFollowingUsersIU.getFollowerId());
         if(optionalFollowerId.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoFollowingUsersIU.getFollowerId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"followerId: " + dtoFollowingUsersIU.getFollowerId().toString()));
         }
         Optional<User> optionalFollowingId = userRepository.findById(dtoFollowingUsersIU.getFollowingId());
         if(optionalFollowingId.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoFollowingUsersIU.getFollowingId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"followingId: " + dtoFollowingUsersIU.getFollowingId().toString()));
         }
         FollowingUsers followingUsers = new FollowingUsers();
         followingUsers.setCreateTime(new Date());
@@ -53,10 +68,29 @@ public class FollowingUsersServiceImpl implements IFollowingUsersService, SavedT
 
         return followingUsers;
     }
+    private FollowingUsers findFollowingUser(DtoFollowingUsersIU dtoFollowingUsersIU){
+        Optional<FollowingUsers> optionalFollowingUsers = followingUsersRepository
+                .findDistinctByFollowerIdAndFollowingId(dtoFollowingUsersIU.getFollowerId(),dtoFollowingUsersIU.getFollowingId());
+        if(optionalFollowingUsers.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,
+                    "followerId: " +dtoFollowingUsersIU.getFollowerId().toString() +
+                            " & followingId: " + dtoFollowingUsersIU.getFollowingId().toString()));
+        }
+        return optionalFollowingUsers.get();
+    }
 
     @Override
     public DtoFollowingUsers followUser(DtoFollowingUsersIU dtoFollowingUsersIU) {
         FollowingUsers savedFollowingUsers = followingUsersRepository.save(createFollowingUsers(dtoFollowingUsersIU));
-        return savedtoDtoSavedEntry(savedFollowingUsers);
+        return savedtoDtoFollowingUsers(savedFollowingUsers);
+    }
+
+    @Override
+    public DtoFollowingUsers unfollowUser(DtoFollowingUsersIU dtoFollowingUsersIU) {
+        FollowingUsers followingUsers = findFollowingUser(dtoFollowingUsersIU);
+        decreaseFollowerCount(followingUsers.getFollowing());
+        decreaseFollowingCount(followingUsers.getFollower());
+        followingUsersRepository.delete(followingUsers);
+        return savedtoDtoFollowingUsers(followingUsers);
     }
 }

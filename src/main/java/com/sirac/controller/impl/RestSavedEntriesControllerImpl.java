@@ -25,4 +25,10 @@ public class RestSavedEntriesControllerImpl extends RestBaseController implement
     public RootEntity<DtoSavedEntries> saveEntry(@Valid @RequestBody DtoSavedEntriesIU dtoSavedEntriesIU) {
         return ok(savedEntriesService.saveEntry(dtoSavedEntriesIU));
     }
+
+    @PostMapping("/delete-saved-entry")
+    @Override
+    public RootEntity<DtoSavedEntries> deleteSavedEntry(@Valid @RequestBody DtoSavedEntriesIU dtoSavedEntriesIU) {
+        return ok(savedEntriesService.deleteSavedEntry(dtoSavedEntriesIU));
+    }
 }

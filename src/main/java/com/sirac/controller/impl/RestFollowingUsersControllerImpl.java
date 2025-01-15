@@ -25,4 +25,10 @@ public class RestFollowingUsersControllerImpl extends RestBaseController impleme
     public RootEntity<DtoFollowingUsers> followUser(@Valid @RequestBody DtoFollowingUsersIU dtoFollowingUsersIU) {
         return ok(followingUsersService.followUser(dtoFollowingUsersIU));
     }
+
+    @PostMapping("/unfollow-user")
+    @Override
+    public RootEntity<DtoFollowingUsers> unfollowUser(@Valid @RequestBody DtoFollowingUsersIU dtoFollowingUsersIU) {
+        return ok(followingUsersService.unfollowUser(dtoFollowingUsersIU));
+    }
 }

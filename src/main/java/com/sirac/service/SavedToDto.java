@@ -51,7 +51,7 @@ public interface SavedToDto {
         return  dtoSavedEntries;
     }
 
-    default DtoFollowingUsers savedtoDtoSavedEntry(FollowingUsers followingUsers){
+    default DtoFollowingUsers savedtoDtoFollowingUsers(FollowingUsers followingUsers){
         DtoFollowingUsers dtoFollowingUsers = new DtoFollowingUsers();
         BeanUtils.copyProperties(followingUsers,dtoFollowingUsers);
 

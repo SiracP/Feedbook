@@ -25,4 +25,10 @@ public class RestLikeControllerImpl extends RestBaseController implements IRestL
     public RootEntity<DtoLike> likeAEntry(@Valid @RequestBody DtoLikeIU dtoLikeIU) {
         return ok(likesService.likeAEntry(dtoLikeIU));
     }
+
+    @PostMapping("/dislike-entry")
+    @Override
+    public RootEntity<DtoLike> dislikeEntry(@Valid @RequestBody DtoLikeIU dtoLikeIU) {
+        return ok(likesService.dislikeEntry(dtoLikeIU));
+    }
 }

@@ -7,7 +7,6 @@ import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
 import com.sirac.model.Entry;
 import com.sirac.model.SavedEntries;
-import com.sirac.model.Topic;
 import com.sirac.model.User;
 import com.sirac.repository.EntryRepository;
 import com.sirac.repository.SavedEntriesRepository;
@@ -33,13 +32,20 @@ public class SavedEntriesServiceImpl implements ISavedEntriesService, SavedToDto
     private UserRepository userRepository;
 
     private SavedEntries createSavedEntry(DtoSavedEntriesIU dtoSavedEntriesIU){
+        Optional<SavedEntries> optionalSavedEntries = savedEntriesRepository
+                .findDistinctByUserIdAndEntryId(dtoSavedEntriesIU.getUserId(),dtoSavedEntriesIU.getEntryId());
+        if(optionalSavedEntries.isPresent()){
+            throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST,
+                    "userId: " + dtoSavedEntriesIU.getUserId().toString()+
+                            " & entryId: " + dtoSavedEntriesIU.getEntryId().toString()));
+        }
         Optional<Entry> optionalEntry = entryRepository.findById(dtoSavedEntriesIU.getEntryId());
         if(optionalEntry.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoSavedEntriesIU.getEntryId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"entryId: " + dtoSavedEntriesIU.getEntryId().toString()));
         }
         Optional<User> optionalUser = userRepository.findById(dtoSavedEntriesIU.getUserId());
         if(optionalUser.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoSavedEntriesIU.getUserId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"userId: " + dtoSavedEntriesIU.getUserId().toString()));
         }
 
         SavedEntries savedEntries = new SavedEntries();
@@ -51,9 +57,27 @@ public class SavedEntriesServiceImpl implements ISavedEntriesService, SavedToDto
         return savedEntries;
     }
 
+    private SavedEntries findSavedEntry(DtoSavedEntriesIU dtoSavedEntriesIU){
+        Optional<SavedEntries> optionalSavedEntries = savedEntriesRepository
+                .findDistinctByUserIdAndEntryId(dtoSavedEntriesIU.getUserId(),dtoSavedEntriesIU.getEntryId());
+        if(optionalSavedEntries.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,
+                    "userId: " + dtoSavedEntriesIU.getUserId().toString() +
+                            " & entryId: " + dtoSavedEntriesIU.getEntryId().toString()));
+        }
+        return optionalSavedEntries.get();
+    }
+
     @Override
     public DtoSavedEntries saveEntry(DtoSavedEntriesIU dtoSavedEntriesIU) {
         SavedEntries savedEntries = savedEntriesRepository.save(createSavedEntry(dtoSavedEntriesIU));
+        return savedtoDtoSavedEntry(savedEntries);
+    }
+
+    @Override
+    public DtoSavedEntries deleteSavedEntry(DtoSavedEntriesIU dtoSavedEntriesIU) {
+        SavedEntries savedEntries = findSavedEntry(dtoSavedEntriesIU);
+        savedEntriesRepository.delete(savedEntries);
         return savedtoDtoSavedEntry(savedEntries);
     }
 }
