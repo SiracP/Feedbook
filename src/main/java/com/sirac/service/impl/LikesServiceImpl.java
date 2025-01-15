@@ -31,7 +31,12 @@ public class LikesServiceImpl implements ILikesService, SavedToDto {
     @Autowired
     private UserRepository userRepository;
 
-    public Likes createLike(DtoLikeIU dtoLikeIU){
+    private Entry increateLikeCount(Entry likeEntry){
+        likeEntry.setLikeCount(likeEntry.getLikeCount()+1);
+        return entryRepository.save(likeEntry);
+    }
+
+    private Likes createLike(DtoLikeIU dtoLikeIU){
         Optional<Entry> optionalEntry = entryRepository.findById(dtoLikeIU.getEntryId());
         if(optionalEntry.isEmpty()){
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoLikeIU.getEntryId().toString()));
@@ -44,7 +49,7 @@ public class LikesServiceImpl implements ILikesService, SavedToDto {
         likes.setCreateTime(new Date());
         likes.setUpdateTime(new Date());
         likes.setUser(optionalUser.get());
-        likes.setEntry(optionalEntry.get());
+        likes.setEntry(increateLikeCount(optionalEntry.get()));
         return likes;
     }
 

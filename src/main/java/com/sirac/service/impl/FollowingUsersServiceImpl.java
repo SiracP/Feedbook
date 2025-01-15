@@ -27,6 +27,15 @@ public class FollowingUsersServiceImpl implements IFollowingUsersService, SavedT
     @Autowired
     private FollowingUsersRepository followingUsersRepository;
 
+    private User increaseFollowingCount(User follower){
+        follower.setFollowingCount(follower.getFollowingCount()+1);
+        return userRepository.save(follower);
+    }
+    private User increaseFollowerCount(User following){
+        following.setFollowersCount(following.getFollowersCount()+1);
+        return userRepository.save(following);
+    }
+
     private FollowingUsers createFollowingUsers(DtoFollowingUsersIU dtoFollowingUsersIU){
         Optional<User> optionalFollowerId = userRepository.findById(dtoFollowingUsersIU.getFollowerId());
         if(optionalFollowerId.isEmpty()){
@@ -39,8 +48,8 @@ public class FollowingUsersServiceImpl implements IFollowingUsersService, SavedT
         FollowingUsers followingUsers = new FollowingUsers();
         followingUsers.setCreateTime(new Date());
         followingUsers.setUpdateTime(new Date());
-        followingUsers.setFollower(optionalFollowerId.get());
-        followingUsers.setFollowing(optionalFollowingId.get());
+        followingUsers.setFollower(increaseFollowingCount(optionalFollowerId.get()));
+        followingUsers.setFollowing(increaseFollowerCount(optionalFollowingId.get()));
 
         return followingUsers;
     }

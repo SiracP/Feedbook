@@ -11,5 +11,5 @@ public class DtoFollowingUsers {
 
     private DtoUser follower;
 
-    private DtoUser followering;
+    private DtoUser following;
 }

@@ -56,7 +56,7 @@ public interface SavedToDto {
         BeanUtils.copyProperties(followingUsers,dtoFollowingUsers);
 
         dtoFollowingUsers.setFollower(savedToDtoUser(followingUsers.getFollower()));
-        dtoFollowingUsers.setFollowering((savedToDtoUser(followingUsers.getFollowing())));
+        dtoFollowingUsers.setFollowing((savedToDtoUser(followingUsers.getFollowing())));
 
         return  dtoFollowingUsers;
     }

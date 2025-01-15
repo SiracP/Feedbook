@@ -34,6 +34,11 @@ public class EntryServiceImpl implements IEntryService, SavedToDto {
     @Autowired
     private UserRepository userRepository;
 
+    private Topic increaseEntryCount(Topic entryTopic){
+        entryTopic.setEntryCount(entryTopic.getEntryCount() + 1);
+        return topicRepository.save(entryTopic);
+    }
+
     private Entry createEntry(DtoEntryIU dtoEntryIU){
         Optional<Topic> optionalTopic = topicRepository.findById(dtoEntryIU.getTopicId());
         if(optionalTopic.isEmpty()){
@@ -46,7 +51,7 @@ public class EntryServiceImpl implements IEntryService, SavedToDto {
         Entry entry = new Entry();
         entry.setContent(dtoEntryIU.getContent());
         entry.setUser(optionalUser.get());
-        entry.setTopic(optionalTopic.get());
+        entry.setTopic(increaseEntryCount(optionalTopic.get()));
         entry.setCreateTime(new Date());
         entry.setUpdateTime(new Date());
         entry.setLikeCount(0L);
