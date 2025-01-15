@@ -46,11 +46,11 @@ public class EntryServiceImpl implements IEntryService, SavedToDto {
     private Entry createEntry(DtoEntryIU dtoEntryIU){
         Optional<Topic> optionalTopic = topicRepository.findById(dtoEntryIU.getTopicId());
         if(optionalTopic.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoEntryIU.getTopicId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"topicId: " + dtoEntryIU.getTopicId().toString()));
         }
         Optional<User> optionalUser = userRepository.findById(dtoEntryIU.getUserId());
         if(optionalUser.isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoEntryIU.getUserId().toString()));
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"userId: " +dtoEntryIU.getUserId().toString()));
         }
         Entry entry = new Entry();
         entry.setContent(dtoEntryIU.getContent());
@@ -62,10 +62,26 @@ public class EntryServiceImpl implements IEntryService, SavedToDto {
         return entry;
     }
 
+    private Entry findEntry(Long entryId){
+        Optional<Entry> optionalEntry = entryRepository.findById(entryId);
+        if(optionalEntry.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,"entryId: " + entryId.toString()));
+        }
+        return optionalEntry.get();
+    }
+
     @Override
     public DtoEntry saveEntry(DtoEntryIU dtoEntryIU) {
         Entry savedEntry = entryRepository.save(createEntry(dtoEntryIU));
 
         return savedtoDtoEntry(savedEntry);
+    }
+
+    @Override
+    public DtoEntry deleteEntry(Long entryId){
+        Entry entry = findEntry(entryId);
+        decreaseEntryCount(entry.getTopic());
+        entryRepository.delete(entry);
+        return savedtoDtoEntry(entry);
     }
 }

@@ -33,7 +33,6 @@ public class TopicServiceImpl implements ITopicService, SavedToDto {
         if(optionalUser.isEmpty()){
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,dtoTopicIU.getUserId().toString()));
         }
-
         Topic topic = new Topic();
         topic.setCreateTime(new Date());
         topic.setUpdateTime(new Date());

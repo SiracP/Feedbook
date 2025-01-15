@@ -8,10 +8,7 @@ import com.sirac.dto.dto_insert_update.DtoEntryIU;
 import com.sirac.service.IEntryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/api/entry")
@@ -24,5 +21,11 @@ public class RestEntryController extends RestBaseController implements IRestEntr
     @Override
     public RootEntity<DtoEntry> saveEntry(@Valid @RequestBody DtoEntryIU dtoEntryIU) {
         return ok(entryService.saveEntry(dtoEntryIU));
+    }
+
+    @DeleteMapping("/delete/{entryId}")
+    @Override
+    public RootEntity<DtoEntry> deleteEntry(@RequestParam(name = "entryId") Long entryId) {
+        return ok(entryService.deleteEntry(entryId));
     }
 }

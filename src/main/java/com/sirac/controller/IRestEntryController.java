@@ -6,4 +6,6 @@ import com.sirac.dto.dto_insert_update.DtoEntryIU;
 public interface IRestEntryController {
 
     public RootEntity<DtoEntry> saveEntry(DtoEntryIU dtoEntryIU);
+
+    public RootEntity<DtoEntry> deleteEntry(Long entryId);
 }
