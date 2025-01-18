@@ -1,14 +1,17 @@
 package com.sirac.service.impl;
 
 
+import com.sirac.dto.DtoEntry;
 import com.sirac.dto.DtoUser;
 import com.sirac.dto.dto_insert_update.DtoUserIU;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
 import com.sirac.model.FollowingUsers;
+import com.sirac.model.SavedEntries;
 import com.sirac.model.User;
 import com.sirac.repository.FollowingUsersRepository;
+import com.sirac.repository.SavedEntriesRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.IUserService;
 import com.sirac.service.SavedToDto;
@@ -30,6 +33,9 @@ public class UserServiceImpl implements IUserService, SavedToDto {
 
     @Autowired
     private FollowingUsersRepository followingUsersRepository;
+
+    @Autowired
+    private SavedEntriesRepository savedEntriesRepository;
 
     private User findUser(Long userId){
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -79,5 +85,16 @@ public class UserServiceImpl implements IUserService, SavedToDto {
             followings.add(savedToDtoUser(followingUsers.getFollowing()));
         }
         return followings;
+    }
+
+    @Override
+    public List<DtoEntry> getALlSavedEntries(Long userId) {
+        findUser(userId);
+        List<DtoEntry> entryList = new ArrayList<>();
+        List<SavedEntries> savedEntriesList = savedEntriesRepository.findByUserId(userId);
+        for(SavedEntries savedEntries : savedEntriesList){
+            entryList.add(savedtoDtoEntry(savedEntries.getEntry()));
+        }
+        return entryList;
     }
 }

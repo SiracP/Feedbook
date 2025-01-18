@@ -3,6 +3,7 @@ package com.sirac.controller.impl;
 import com.sirac.controller.IRestUserController;
 import com.sirac.controller.RestBaseController;
 import com.sirac.controller.RootEntity;
+import com.sirac.dto.DtoEntry;
 import com.sirac.dto.DtoUser;
 import com.sirac.dto.dto_insert_update.DtoUserIU;
 import com.sirac.service.IUserService;
@@ -33,13 +34,19 @@ public class RestUserControllerImpl extends RestBaseController implements IRestU
 
     @GetMapping("/get-all-followers/{userId}")
     @Override
-    public RootEntity<List<DtoUser>> getAllFollowers(Long userId) {
+    public RootEntity<List<DtoUser>> getAllFollowers(@PathVariable(name = "userId") Long userId) {
         return ok(userService.getAllFollowers(userId));
     }
 
     @GetMapping("/get-all-followings/{userId}")
     @Override
-    public RootEntity<List<DtoUser>> getAllFollowings(Long userId) {
+    public RootEntity<List<DtoUser>> getAllFollowings(@PathVariable(name = "userId") Long userId) {
         return ok(userService.getAllFollowings(userId));
+    }
+
+    @GetMapping("/get-all-saved-entries/{userId}")
+    @Override
+    public RootEntity<List<DtoEntry>> getAllSavedEntries(@PathVariable(name = "userId") Long userId) {
+        return ok(userService.getALlSavedEntries(userId));
     }
 }

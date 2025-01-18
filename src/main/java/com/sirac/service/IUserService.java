@@ -1,5 +1,6 @@
 package com.sirac.service;
 
+import com.sirac.dto.DtoEntry;
 import com.sirac.dto.DtoUser;
 import com.sirac.dto.dto_insert_update.DtoUserIU;
 
@@ -14,4 +15,6 @@ public interface IUserService {
     public List<DtoUser> getAllFollowers(Long userId);
 
     public List<DtoUser> getAllFollowings(Long userId);
+
+    public List<DtoEntry> getALlSavedEntries(Long userId);
 }
