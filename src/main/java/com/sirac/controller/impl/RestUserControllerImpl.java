@@ -30,4 +30,16 @@ public class RestUserControllerImpl extends RestBaseController implements IRestU
     public RootEntity<DtoUser> updateUser(@PathVariable(name = "userId") Long userId,@Valid @RequestBody DtoUserIU dtoUserIU) {
         return ok(userService.updateUser(userId,dtoUserIU));
     }
+
+    @GetMapping("/get-all-followers/{userId}")
+    @Override
+    public RootEntity<List<DtoUser>> getAllFollowers(Long userId) {
+        return ok(userService.getAllFollowers(userId));
+    }
+
+    @GetMapping("/get-all-followings/{userId}")
+    @Override
+    public RootEntity<List<DtoUser>> getAllFollowings(Long userId) {
+        return ok(userService.getAllFollowings(userId));
+    }
 }

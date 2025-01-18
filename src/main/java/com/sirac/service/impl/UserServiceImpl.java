@@ -6,7 +6,9 @@ import com.sirac.dto.dto_insert_update.DtoUserIU;
 import com.sirac.exception.BaseException;
 import com.sirac.exception.ErrorMessage;
 import com.sirac.exception.MessageType;
+import com.sirac.model.FollowingUsers;
 import com.sirac.model.User;
+import com.sirac.repository.FollowingUsersRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.IUserService;
 import com.sirac.service.SavedToDto;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements IUserService, SavedToDto {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FollowingUsersRepository followingUsersRepository;
 
     private User findUser(Long userId){
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -52,5 +57,27 @@ public class UserServiceImpl implements IUserService, SavedToDto {
         user.setUpdateTime(new Date());
         user.setPassword(passwordEncoder.encode(dtoUserIU.getPassword()));
         return savedToDtoUser(userRepository.save(user));
+    }
+
+    @Override
+    public List<DtoUser> getAllFollowers(Long userId) {
+        findUser(userId);
+        List<DtoUser> followers = new ArrayList<>();
+        List<FollowingUsers> followingsList = followingUsersRepository.findByFollowingId(userId);
+        for(FollowingUsers followingUsers : followingsList){
+            followers.add(savedToDtoUser(followingUsers.getFollower()));
+        }
+        return followers;
+    }
+
+    @Override
+    public List<DtoUser> getAllFollowings(Long userId) {
+        findUser(userId);
+        List<DtoUser> followings = new ArrayList<>();
+        List<FollowingUsers> followerssList = followingUsersRepository.findByFollowerId(userId);
+        for(FollowingUsers followingUsers : followerssList){
+            followings.add(savedToDtoUser(followingUsers.getFollowing()));
+        }
+        return followings;
     }
 }

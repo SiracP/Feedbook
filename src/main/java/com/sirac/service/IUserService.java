@@ -10,4 +10,8 @@ public interface IUserService {
     public List<DtoUser> getAllUsers();
 
     public DtoUser updateUser(Long userId, DtoUserIU dtoUserIU);
+
+    public List<DtoUser> getAllFollowers(Long userId);
+
+    public List<DtoUser> getAllFollowings(Long userId);
 }

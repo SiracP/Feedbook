@@ -10,4 +10,8 @@ public interface IRestUserController {
     public RootEntity<List<DtoUser>> getAllUsers();
 
     public RootEntity<DtoUser> updateUser(Long userId, DtoUserIU dtoUserIU);
+
+    public RootEntity<List<DtoUser>> getAllFollowers(Long userId);
+
+    public RootEntity<List<DtoUser>> getAllFollowings(Long userId);
 }
