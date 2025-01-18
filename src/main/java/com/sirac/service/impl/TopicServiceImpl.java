@@ -73,8 +73,7 @@ public class TopicServiceImpl implements ITopicService, SavedToDto {
         findTopic(topicId);
         List<Entry> allEntries = entryRepository.findAllByTopicId(topicId);
         List<DtoEntry> dtoEntries = new ArrayList<>();
-        for (Iterator<Entry> iterator = allEntries.iterator(); iterator.hasNext();) {
-            Entry next =  iterator.next();
+        for (Entry next : allEntries) {
             dtoEntries.add(savedtoDtoEntry(next));
         }
         return dtoEntries;
