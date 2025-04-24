@@ -15,7 +15,6 @@ import com.sirac.repository.RefreshTokenRepository;
 import com.sirac.repository.UserRepository;
 import com.sirac.service.IAuthenticationService;
 import com.sirac.service.SavedToDto;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
